@@ -2,8 +2,5 @@
   "framework": null,
   "buildCommand": null,
   "outputDirectory": ".",
-  "routes": [{ "src": "/(.*)", "dest": "/index.html" }],
-  "static": {
-    "include": ["style.css", "script.js", "public"]
-  }
+  "routes": [{ "src": "/(.*)", "dest": "/index.html" }]
 }
