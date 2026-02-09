@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Hey Friend 💛</title>
+<link rel="stylesheet" href="style.css">
+
+</head>
+<body>
+<div id="container">
+
+    <!-- Screen 1 -->
+    <div class="screen active" id="screen1">
+        <h2>Hey... heard mummy scolded you 😔</h2>
+        <p>Made this to cheer you up!</p>
+        <button onclick="goToScreen(2)">Okay let's see 👀</button>
+    </div>
+    <!-- Screen 2 -->
+    <div class="screen" id="screen2">
+        <h2>Kahi ko ris kahi... we know! 😅</h2>
+        <p>But mummy is mummy. She loves you!</p>
+        <button onclick="goToScreen(3)">Here’s a tiny surprise 😺😸</button>
+    </div>
+    <!-- Screen 3: Main cat meme screen -->
+    <div class="screen" id="screen3">
+        <img id="catImage" class="cat-image" src="" alt="Cat Meme">
+        <div class="compliment-box" id="complimentBox">You're amazing!</div>
+        <div id="counter">5 inspirations left</div>
+        <button class="btn-secondary" onclick="nextMeme()">Aru surprise xa!?😺</button>
+        <button onclick="goToScreen(4)">Bas, enough for today 💛</button>
+    </div>
+    <!-- Screen 4: Second last screen -->
+    <div class="screen" id="screen4">
+        <h2>Alright! 🌟</h2>
+        <p>Hope you're feeling better now!</p>
+        <p>Exam ta hudai rahanxa. Chill gara, relax gara, mood thik rakha! 😎</p>
+        <button onclick="goToScreen(6)">Lah, that’s enough 😅</button>
+        <button onclick="showBonusScreen()">A tiny bonus 😏</button>
+    </div>
+    <!-- Screen 5: Tiny Bonus / Special message -->
+    <div class="screen" id="screen5">
+        <h2>🎉 Tiny Bonus! 😏</h2>
+        <p>Chill bro, today you survived mummy scolds like a champ 😎</p>
+        <p>Enjoy this little mischief moment! 😹</p>
+        <button onclick="goToScreen(6)">Lah, that’s enough 😅</button>
+    </div>
+    <!-- Screen 6: Exit -->
+    <div class="screen" id="screen6">
+        <h2>BYE 🐱</h2>
+    </div>
+</div>
+<script src="./index.js"></script>
+
+</body>
+</html>
