@@ -1,60 +1,102 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
-<head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Hey Friend 💛</title>
-<link rel="stylesheet" href="./style.css">
-</head>
-<body>
-<!-- Mute Toggle Button -->
-<button id="muteBtn" class="mute-toggle" onclick="toggleMute()">🔊</button>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Hey Friend 💛</title>
+    <link rel="stylesheet" href="./style.css" />
+  </head>
+  <body>
+    <!-- Mute Toggle Button -->
+    <button id="muteBtn" class="mute-toggle" onclick="toggleMute()">🔊</button>
 
-<div id="container">
-    <!-- Screen 1 -->
-    <div class="screen active" id="screen1">
+    <div id="container">
+      <!-- Screen 1 -->
+      <div class="screen active" id="screen1">
         <h2>Hey... heard mummy scolded you 😔</h2>
         <p>Made this to cheer you up!</p>
         <button onclick="goToScreen(2)">Okay let's see 👀</button>
-    </div>
-    <!-- Screen 2 -->
-    <div class="screen" id="screen2">
+      </div>
+
+      <!-- Screen 2 -->
+      <div class="screen" id="screen2">
         <h2>Kahi ko ris kahi... we know! 😅</h2>
         <p>But mummy is mummy. She loves you!</p>
         <button onclick="goToScreen(3)">Here's a tiny surprise 😺😸</button>
-    </div>
-    <!-- Screen 3: Main cat meme screen -->
-    <div class="screen" id="screen3">
+      </div>
+
+      <!-- Screen 3: Cat memes -->
+      <div class="screen" id="screen3">
         <div class="image-container">
-            <img id="catImage" class="cat-image" src="" alt="Cat Meme">
-            <div class="image-loader" id="imageLoader">Loading... 🐱</div>
+          <img id="memeImage" class="cat-image" src="" alt="Cat Meme" />
+          <div class="image-loader" id="memeLoader">Loading... 🐱</div>
         </div>
-        <div class="compliment-box" id="complimentBox">You're amazing!</div>
-        <div id="counter">5 inspirations left</div>
+        <div class="compliment-box" id="memeComplimentBox">You're amazing!</div>
+        <div id="memeCounter">5 inspirations left</div>
         <button class="btn-secondary" onclick="nextMeme()">Ajhai xa!?🐱</button>
         <button onclick="goToScreen(4)">Bas, enough for today 💛</button>
-    </div>
-    <!-- Screen 4: Second last screen -->
-    <div class="screen" id="screen4">
+      </div>
+
+      <!-- Screen 4: Happy image -->
+      <div class="screen" id="screen4">
         <h2>Alright! 🌟</h2>
         <p>Hope you're feeling better now!</p>
-        <p>Exam ta hudai rahanxa. Chill gara, relax gara, mood thik rakha! 😎</p>
+        <div class="image-container">
+          <img
+            id="happyImage"
+            class="cat-image loaded"
+            src="./images/happy.jpg"
+            alt="Happy Cat"
+          />
+          <div class="image-loader" id="happyLoader">Loading... 🐱</div>
+        </div>
+        <div id="happyCounter"></div>
+        <p>
+          Exam ta hudai rahanxa. Chill gara, relax gara, mood thik rakha! 😎
+        </p>
         <button onclick="goToScreen(6)">Lah, that's enough 😅</button>
         <button onclick="showBonusScreen()">A tiny bonus 😏</button>
-    </div>
-    <!-- Screen 5: Tiny Bonus / Special message -->
-    <div class="screen" id="screen5">
+      </div>
+
+      <!-- Screen 5: Bonus -->
+      <div class="screen" id="screen5">
         <h2>🎉 Tiny Bonus! 😏</h2>
+        <div class="image-container">
+          <img
+            id="saluteImage"
+            class="cat-image loaded"
+            src="./images/bonus.jpg"
+            alt="Smart Cat"
+          />
+          <div class="image-loader" id="saluteLoader">Loading... 😺</div>
+        </div>
         <p>Chill bro, today you survived mummy scolds like a champ 😎</p>
         <p>Enjoy this little mischief moment! 😹</p>
         <button onclick="goToScreen(6)">Lah, that's enough 😅</button>
-    </div>
-    <!-- Screen 6: Exit -->
-    <div class="screen" id="screen6">
-        <h2>STAY CALM AND BYE🐱</h2>
-    </div>
-</div>
-<script src="./script.js"></script>
+      </div>
 
-</body>
+      <!-- Screen 6: Salute GIF -->
+      <div class="screen" id="screen6">
+        <h2>STAY CALM AND BYE🐱</h2>
+        <div class="image-container">
+          <img
+            id="saluteImage"
+            class="cat-image loaded"
+            src="./images/cat-salute.gif"
+            alt="Cat Salute"
+          />
+          <div class="image-loader" id="saluteLoader">Loading... 😺</div>
+        </div>
+        <div class="compliment-box" id="saluteComplimentBox">
+          You made it! 🌟 Keep smiling! 😺
+        </div>
+        <div id="saluteCounter"></div>
+        <button onclick="crackAndEnd()">Bye 👋</button>
+        <button onclick="resetApp()">Redo</button>
+      </div>
+    </div>
+    <!-- For blackout -->
+    <div id="blackout"></div>
+    <script src="./script.js"></script>
+  </body>
 </html>

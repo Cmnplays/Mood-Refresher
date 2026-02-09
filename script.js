@@ -30,120 +30,119 @@ const catMemes = [
   },
 ];
 
-// Sound effects using Web Audio API
+// Web Audio API
 const audioContext = new (window.AudioContext || window.webkitAudioContext)();
-
 function playSound(type) {
   if (isMuted) return;
 
-  const oscillator = audioContext.createOscillator();
-  const gainNode = audioContext.createGain();
-
-  oscillator.connect(gainNode);
-  gainNode.connect(audioContext.destination);
+  const osc = audioContext.createOscillator();
+  const gain = audioContext.createGain();
+  osc.connect(gain);
+  gain.connect(audioContext.destination);
+  const now = audioContext.currentTime;
 
   switch (type) {
     case "click":
-      // Soft pop sound
-      oscillator.frequency.value = 800;
-      gainNode.gain.setValueAtTime(0.1, audioContext.currentTime);
-      gainNode.gain.exponentialRampToValueAtTime(
-        0.01,
-        audioContext.currentTime + 0.1,
-      );
-      oscillator.start(audioContext.currentTime);
-      oscillator.stop(audioContext.currentTime + 0.1);
+      osc.type = "square";
+      osc.frequency.setValueAtTime(900, now);
+      gain.gain.setValueAtTime(0.2, now);
+      gain.gain.exponentialRampToValueAtTime(0.001, now + 0.08);
+      osc.start(now);
+      osc.stop(now + 0.08);
       break;
-
     case "meme":
-      // Playful ascending tone
-      oscillator.frequency.setValueAtTime(400, audioContext.currentTime);
-      oscillator.frequency.exponentialRampToValueAtTime(
-        600,
-        audioContext.currentTime + 0.15,
-      );
-      gainNode.gain.setValueAtTime(0.15, audioContext.currentTime);
-      gainNode.gain.exponentialRampToValueAtTime(
-        0.01,
-        audioContext.currentTime + 0.15,
-      );
-      oscillator.start(audioContext.currentTime);
-      oscillator.stop(audioContext.currentTime + 0.15);
+      osc.type = "sine";
+      osc.frequency.setValueAtTime(400, now);
+      osc.frequency.exponentialRampToValueAtTime(600, now + 0.15);
+      gain.gain.setValueAtTime(0.15, now);
+      gain.gain.exponentialRampToValueAtTime(0.01, now + 0.15);
+      osc.start(now);
+      osc.stop(now + 0.15);
       break;
-
     case "bonus":
-      // Cheerful chime
-      oscillator.frequency.setValueAtTime(523, audioContext.currentTime);
-      oscillator.frequency.setValueAtTime(659, audioContext.currentTime + 0.1);
-      oscillator.frequency.setValueAtTime(784, audioContext.currentTime + 0.2);
-      gainNode.gain.setValueAtTime(0.12, audioContext.currentTime);
-      gainNode.gain.exponentialRampToValueAtTime(
-        0.01,
-        audioContext.currentTime + 0.3,
-      );
-      oscillator.start(audioContext.currentTime);
-      oscillator.stop(audioContext.currentTime + 0.3);
+      const osc2 = audioContext.createOscillator();
+      const gain2 = audioContext.createGain();
+      osc.type = "triangle";
+      osc2.type = "sine";
+      osc.frequency.setValueAtTime(523, now);
+      osc.frequency.exponentialRampToValueAtTime(659, now + 0.15);
+      osc2.frequency.setValueAtTime(783, now);
+      osc2.frequency.exponentialRampToValueAtTime(1046, now + 0.15);
+      gain.gain.setValueAtTime(0.12, now);
+      gain.gain.exponentialRampToValueAtTime(0.001, now + 0.3);
+      gain2.gain.setValueAtTime(0.08, now);
+      gain2.gain.exponentialRampToValueAtTime(0.001, now + 0.3);
+      osc2.connect(gain2);
+      gain2.connect(audioContext.destination);
+      osc.start(now);
+      osc.stop(now + 0.3);
+      osc2.start(now);
+      osc2.stop(now + 0.3);
       break;
-
     case "complete":
-      // Success sound
-      oscillator.frequency.setValueAtTime(600, audioContext.currentTime);
-      oscillator.frequency.exponentialRampToValueAtTime(
-        800,
-        audioContext.currentTime + 0.2,
-      );
-      gainNode.gain.setValueAtTime(0.15, audioContext.currentTime);
-      gainNode.gain.exponentialRampToValueAtTime(
-        0.01,
-        audioContext.currentTime + 0.2,
-      );
-      oscillator.start(audioContext.currentTime);
-      oscillator.stop(audioContext.currentTime + 0.2);
+      const osc3 = audioContext.createOscillator();
+      const gain3 = audioContext.createGain();
+      osc.type = "triangle";
+      osc3.type = "sine";
+      osc.frequency.setValueAtTime(700, now);
+      osc.frequency.exponentialRampToValueAtTime(900, now + 0.25);
+      osc3.frequency.setValueAtTime(850, now);
+      osc3.frequency.exponentialRampToValueAtTime(1050, now + 0.25);
+      gain.gain.setValueAtTime(0.15, now);
+      gain.gain.exponentialRampToValueAtTime(0.001, now + 0.25);
+      gain3.gain.setValueAtTime(0.12, now);
+      gain3.gain.exponentialRampToValueAtTime(0.001, now + 0.25);
+      osc3.connect(gain3);
+      gain3.connect(audioContext.destination);
+      osc.start(now);
+      osc.stop(now + 0.25);
+      osc3.start(now);
+      osc3.stop(now + 0.25);
       break;
   }
 }
 
+// Mute toggle
 function toggleMute() {
   isMuted = !isMuted;
-  const btn = document.getElementById("muteBtn");
-  btn.textContent = isMuted ? "🔇" : "🔊";
-
-  // Play a sound when unmuting
-  if (!isMuted) {
-    playSound("click");
-  }
+  document.getElementById("muteBtn").textContent = isMuted ? "🔇" : "🔊";
+  if (!isMuted) playSound("click");
 }
 
-// Preload all images when page loads
+// Preload images
 function preloadImages() {
-  catMemes.forEach((meme, index) => {
+  catMemes.forEach((m, index) => {
     const img = new Image();
-    img.src = meme.img;
+    img.src = m.img;
     preloadedImages[index] = img;
   });
-}
 
+  preloadedImages.happy = new Image();
+  preloadedImages.happy.src = "./images/happy.jpg";
+
+  preloadedImages.salute = new Image();
+  preloadedImages.salute.src = "./images/cat-salute.gif";
+
+  preloadImages.bonus = new Image();
+  preloadImages.bonus.src = "./images/bonus.jpg";
+}
 window.addEventListener("load", preloadImages);
 
+// Screen navigation
 function goToScreen(num) {
   playSound("click");
-
   document
     .querySelectorAll(".screen")
     .forEach((s) => s.classList.remove("active"));
   document.getElementById("screen" + num).classList.add("active");
 
-  if (num === 3 && memeCount === 0) {
-    showMeme();
-  }
-
-  if (num === 6) {
-    playSound("complete");
-  }
-
+  if (num === 3 && memeCount === 0) showMeme();
+  if (num === 4) showHappy();
+  if (num === 6) showSalute();
   createFloatingEmoji();
 }
 
+// Meme functions
 function nextMeme() {
   if (memeCount < catMemes.length) {
     playSound("meme");
@@ -157,43 +156,45 @@ function nextMeme() {
 function showMeme() {
   if (memeCount >= catMemes.length) memeCount = 0;
 
-  const message = catMemes[memeCount];
-  const catImg = document.getElementById("catImage");
-  const loader = document.getElementById("imageLoader");
+  const msg = catMemes[memeCount];
+  const img = document.getElementById("memeImage");
+  const loader = document.getElementById("memeLoader");
+  loader.classList.add("hidden"); // preloaded
+  img.src = preloadedImages[memeCount].src;
+  img.classList.add("loaded");
 
-  loader.classList.remove("hidden");
-  catImg.classList.remove("loaded");
+  img.style.animation = "none";
+  setTimeout(() => (img.style.animation = "slideIn 0.5s ease"), 10);
 
-  if (preloadedImages[memeCount] && preloadedImages[memeCount].complete) {
-    catImg.src = message.img;
-    catImg.classList.add("loaded");
-    loader.classList.add("hidden");
-  } else {
-    const tempImg = new Image();
-    tempImg.onload = function () {
-      catImg.src = message.img;
-      catImg.classList.add("loaded");
-      loader.classList.add("hidden");
-    };
-    tempImg.src = message.img;
-  }
-
-  catImg.style.animation = "none";
-  setTimeout(() => {
-    catImg.style.animation = "slideIn 0.5s ease";
-  }, 10);
-
-  document.getElementById("complimentBox").textContent = message.text;
-
-  const inspirationsLeft = catMemes.length - memeCount - 1;
-  document.getElementById("counter").textContent =
-    inspirationsLeft > 0
-      ? `${inspirationsLeft} inspirations left`
-      : "Last inspiration!";
+  document.getElementById("memeComplimentBox").textContent = msg.text;
+  const left = catMemes.length - memeCount - 1;
+  document.getElementById("memeCounter").textContent =
+    left > 0 ? `${left} inspirations left` : "Last inspiration!";
 
   memeCount++;
 }
 
+function showHappy() {
+  document.getElementById("screen4").classList.add("active");
+  const img = document.getElementById("happyImage");
+  img.style.animation = "slideIn 0.5s ease";
+}
+
+function showSalute() {
+  document.getElementById("screen6").classList.add("active");
+  const img = document.getElementById("saluteImage");
+  img.style.animation = "slideIn 0.5s ease";
+  playSound("complete");
+}
+
+function showBonus() {
+  document.getElementById("screen5").classList.add("active");
+  const img = document.getElementById("bonus");
+  img.style.animation = "slideIn 0.5s ease";
+  playSound("meme");
+}
+
+// Bonus screen
 function showBonusScreen() {
   playSound("bonus");
   document
@@ -203,22 +204,54 @@ function showBonusScreen() {
   createFloatingEmoji();
 }
 
+// Floating emojis
 function createFloatingEmoji() {
   const emojis = ["💛", "✨", "🌟", "😺", "💪", "🌈"];
+  const e1 = document.createElement("div");
+  e1.className = "floating-emoji";
+  e1.textContent = "💫";
+  e1.style.left = 10 + Math.random() * 20 + "%";
+  e1.style.top = 50 + Math.random() * 20 - 10 + "%";
+  document.body.appendChild(e1);
+  setTimeout(() => e1.remove(), 3000);
 
-  const emoji1 = document.createElement("div");
-  emoji1.className = "floating-emoji";
-  emoji1.textContent = "💫";
-  emoji1.style.left = 10 + Math.random() * 20 + "%";
-  emoji1.style.top = 50 + Math.random() * 20 - 10 + "%";
-  document.body.appendChild(emoji1);
-  setTimeout(() => emoji1.remove(), 3000);
+  const e2 = document.createElement("div");
+  e2.className = "floating-emoji";
+  e2.textContent = emojis[Math.floor(Math.random() * emojis.length)];
+  e2.style.left = 70 + Math.random() * 20 + "%";
+  e2.style.top = 50 + Math.random() * 20 - 10 + "%";
+  document.body.appendChild(e2);
+  setTimeout(() => e2.remove(), 3000);
+}
 
-  const emoji2 = document.createElement("div");
-  emoji2.className = "floating-emoji";
-  emoji2.textContent = emojis[Math.floor(Math.random() * emojis.length)];
-  emoji2.style.left = 70 + Math.random() * 20 + "%";
-  emoji2.style.top = 50 + Math.random() * 20 - 10 + "%";
-  document.body.appendChild(emoji2);
-  setTimeout(() => emoji2.remove(), 3000);
+// Reset app
+function resetApp() {
+  memeCount = 0;
+  document
+    .querySelectorAll(".screen")
+    .forEach((s) => s.classList.remove("active"));
+  document.getElementById("screen1").classList.add("active");
+  playSound("complete");
+}
+
+//for crack
+function crackAndEnd() {
+  playSound("complete"); // final sound
+
+  const container = document.getElementById("container");
+  const blackout = document.getElementById("blackout");
+
+  // Crack (shake)
+  container.classList.add("crack");
+
+  // After shake → fall
+  setTimeout(() => {
+    container.classList.remove("crack");
+    container.classList.add("fall");
+  }, 500);
+
+  // After fall → blackout
+  setTimeout(() => {
+    blackout.style.opacity = "1";
+  }, 1200);
 }
