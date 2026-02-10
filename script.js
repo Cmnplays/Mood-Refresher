@@ -116,7 +116,15 @@ function playSound(type) {
 function toggleMute() {
   isMuted = !isMuted;
   document.getElementById("muteBtn").textContent = isMuted ? "🔇" : "🔊";
-  if (!isMuted) playSound("click");
+
+  if (isMuted) {
+    pauseHappyAudio(); // ⬅️ ADD THIS
+  } else {
+    if (document.getElementById("screen4").classList.contains("active")) {
+      playHappyAudio();
+    }
+    playSound("click");
+  }
 }
 
 // Preload images
@@ -222,6 +230,24 @@ function showHappy() {
   document.getElementById("screen4").classList.add("active");
   const img = document.getElementById("happyImage");
   img.style.animation = "slideIn 0.5s ease";
+}
+
+function playHappyAudio() {
+  const audio = document.getElementById("happySound");
+  if (!audio) return;
+
+  if (audioContext.state === "suspended") {
+    audioContext.resume();
+  }
+
+  audio.play().catch(() => {});
+}
+
+function pauseHappyAudio() {
+  const audio = document.getElementById("happySound");
+  if (!audio) return;
+
+  audio.pause();
 }
 
 function showSalute() {
